@@ -1,5 +1,10 @@
 #pragma once
 
+#include <mutex>
+#include <atomic>
+
+using namespace std;
+
 using BYTE = unsigned char;
 using int8 = __int8;
 using int16 = __int16;

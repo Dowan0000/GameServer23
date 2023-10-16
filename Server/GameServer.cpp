@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "ThreadManager.h"
 
 #include "winsock2.h"
 
@@ -6,6 +7,14 @@
 
 int main()
 {
+	GThreadManager->LaunchThread([]()
+		{
+			cout << "12345" << endl;
+		});
+
+
+
+
 	/*WSAData wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
