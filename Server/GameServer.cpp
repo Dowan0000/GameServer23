@@ -7,11 +7,15 @@
 
 int main()
 {
-	GThreadManager->LaunchThread([]()
-		{
-			cout << "12345" << endl;
-		});
-
+	for (int i = 0; i < 5; i++)
+	{
+		GThreadManager->LaunchThread([]()
+			{
+				cout << "threadID : " << LThreadId << endl;
+			});
+	}
+	
+	cout << "threadID : " << LThreadId << endl;
 
 
 
