@@ -1,5 +1,7 @@
+C:\Users\monsterslab\Desktop\Server\ServerCore\Allocator.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\Allocator.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\CoreGlobal.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\CoreGlobal.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\CorePch.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\CorePch.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\CoreTLS.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\CoreTLS.obj
+C:\Users\monsterslab\Desktop\Server\ServerCore\Memory.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\Memory.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\pch.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\pch.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\ThreadManager.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\ThreadManager.obj

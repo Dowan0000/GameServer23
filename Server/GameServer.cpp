@@ -1,13 +1,36 @@
 #include "pch.h"
 #include "ThreadManager.h"
+#include "Memory.h"
 
 #include "winsock2.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
+class test
+{
+public:
+	test()
+	{
+		cout << "test()" << endl;
+	}
+
+	test(int32 a) : _test(a)
+	{
+		cout << "test(int32)" << endl;
+	}
+
+	~test()
+	{
+		cout << "~test()" << endl;
+	}
+
+private:
+	int32 _test;
+};
+
 int main()
 {
-	for (int i = 0; i < 5; i++)
+	/*for (int i = 0; i < 5; i++)
 	{
 		GThreadManager->LaunchThread([]()
 			{
@@ -15,8 +38,12 @@ int main()
 			});
 	}
 	
-	cout << "threadID : " << LThreadId << endl;
+	cout << "threadID : " << LThreadId << endl;*/
 
+
+	test* t = xnew<test>();
+
+	xdelete(t);
 
 
 	/*WSAData wsaData;
