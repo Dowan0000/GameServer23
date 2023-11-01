@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "IocpCore.h"
+#include "IocpEvent.h"
 
 IocpCore::IocpCore()
 {
@@ -18,7 +19,24 @@ bool IocpCore::Register(shared_ptr<IocpObject> iocpObject)
 
 bool IocpCore::Dispatch(uint32 timeoutMs)
 {
-	//GetQueuedCompletionStatus
+	DWORD numberOfBytes = 0;
+	ULONG_PTR key = 0;
+	IocpEvent* iocpEvent = nullptr;
+
+	bool res = GetQueuedCompletionStatus(_iocpHandle, OUT &numberOfBytes, 
+		OUT &key, OUT reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), timeoutMs);
+
+	if (res)
+	{
+		shared_ptr<IocpObject> iocpObject = iocpEvent->_iocpObject;
+		iocpObject->Dispatch(iocpEvent, numberOfBytes);
+	}
+	else
+	{
+		cout << "GetQueuedCompletionStatus failed, errCode: " << GetLastError() << endl;
+		//errCode
+	}
+
 
 	return true;
 }
