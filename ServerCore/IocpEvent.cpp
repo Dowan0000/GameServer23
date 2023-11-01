@@ -8,9 +8,9 @@ IocpEvent::IocpEvent(EventType type)
 
 void IocpEvent::Init()
 {
-	_overlapped.hEvent = 0;
-	_overlapped.Internal = 0;
-	_overlapped.InternalHigh = 0;
-	_overlapped.Offset = 0;
-	_overlapped.OffsetHigh = 0;
+	OVERLAPPED::hEvent = 0;
+	OVERLAPPED::Internal = 0;
+	OVERLAPPED::InternalHigh = 0;
+	OVERLAPPED::Offset = 0;
+	OVERLAPPED::OffsetHigh = 0;
 }

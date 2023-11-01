@@ -7,5 +7,6 @@ C:\Users\monsterslab\Desktop\Server\ServerCore\IocpEvent.cpp;C:\Users\monstersla
 C:\Users\monsterslab\Desktop\Server\ServerCore\Listener.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\Listener.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\Memory.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\Memory.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\pch.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\pch.obj
+C:\Users\monsterslab\Desktop\Server\ServerCore\Session.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\Session.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\SocketUtils.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\SocketUtils.obj
 C:\Users\monsterslab\Desktop\Server\ServerCore\ThreadManager.cpp;C:\Users\monsterslab\Desktop\Server\ServerCore\x64\Debug\ThreadManager.obj

@@ -1,6 +1,7 @@
 #pragma once
 
 class IocpObject;
+class Session;
 
 enum class EventType : uint8
 {
@@ -11,7 +12,7 @@ enum class EventType : uint8
 	Send,
 };
 
-class IocpEvent
+class IocpEvent : public OVERLAPPED
 {
 public:
 	IocpEvent(EventType type);
@@ -19,7 +20,6 @@ public:
 	void		Init();
 
 public:
-	OVERLAPPED				_overlapped;
 	EventType				_eventType;
 	shared_ptr<IocpObject>	_iocpObject;
 };
@@ -44,6 +44,11 @@ class AcceptEvent : public IocpEvent
 public:
 	AcceptEvent() : IocpEvent(EventType::Accept) {}
 
+	void		SetSession(Session* session) { _session = session; }
+	Session*	GetSession() { return _session; }
+
+private:
+	Session*	 _session;
 };
 
 class RecvEvent : public IocpEvent

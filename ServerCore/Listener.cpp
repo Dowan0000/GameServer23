@@ -2,10 +2,13 @@
 #include "Listener.h"
 #include "SocketUtils.h"
 #include "IocpEvent.h"
+#include "Session.h"
 
 Listener::~Listener()
 {
-
+	SocketUtils::Close(_socket);
+	for(auto acceptEvent : _acceptEvents)
+		xdelete(acceptEvent);
 }
 
 HANDLE Listener::GetHandle()
@@ -15,6 +18,8 @@ HANDLE Listener::GetHandle()
 
 void Listener::Dispatch(IocpEvent* iocpEvent, int32 numofBytes)
 {
+	AcceptEvent* acceptEvent = static_cast<AcceptEvent*>(iocpEvent);
+	ProcessAccept(acceptEvent);
 }
 
 bool Listener::StartAccept(SOCKET listenSocket, uint16 port)
@@ -42,16 +47,30 @@ bool Listener::StartAccept(SOCKET listenSocket, uint16 port)
 
 void Listener::CloseSocket()
 {
+	SocketUtils::Close(_socket);
 }
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
+	Session* session = xnew<Session>();
 
-	// SocketUtils::AcceptEx
+	acceptEvent->Init();
+	acceptEvent->SetSession(session);
 
+	DWORD recvBytes = 0;
+	bool res = SocketUtils::AcceptEx(_socket, session->GetSocket(), 
+		session->recvBuf, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, 
+		OUT & recvBytes, static_cast<LPOVERLAPPED>(acceptEvent));
+	if (res == false)
+	{
+		// errCode
+		RegisterAccept(acceptEvent);
+	}
+	
 
 }
 
 void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 {
+	// process
 }
