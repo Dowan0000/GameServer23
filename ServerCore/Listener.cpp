@@ -73,4 +73,6 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 {
 	// process
+
+	cout << "Client Connected" << endl;
 }

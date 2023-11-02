@@ -5,6 +5,7 @@
 #include "SocketUtils.h"
 #include "Listener.h"
 
+
 int main()
 {
 	/*SOCKET socket = SocketUtils::CreateSocket();
@@ -26,6 +27,7 @@ int main()
 			
 	}
 
+	GThreadManager->Join();
 
 	return 0;
 }

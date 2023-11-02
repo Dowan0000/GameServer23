@@ -26,3 +26,4 @@ private:
 	HANDLE	_iocpHandle;
 };
 
+extern shared_ptr<IocpCore> GIocpCore;

@@ -4,7 +4,7 @@
     <Filter Include="Main">
       <UniqueIdentifier>{c7b52e5d-7015-4f49-b96c-21b7b125256c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils">
+    <Filter Include="Main\Utils">
       <UniqueIdentifier>{bc7d30ed-a693-4046-96a7-aafd3eb632df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -13,12 +13,12 @@
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Utils</Filter>
+      <Filter>Main\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
-      <Filter>Utils</Filter>
+      <Filter>Main\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

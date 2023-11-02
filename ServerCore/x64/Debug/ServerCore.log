@@ -1,5 +1,5 @@
-﻿  IocpCore.cpp
-  IocpEvent.cpp
+﻿  CoreGlobal.cpp
+  IocpCore.cpp
   Listener.cpp
   Session.cpp
   코드를 생성하고 있습니다...
