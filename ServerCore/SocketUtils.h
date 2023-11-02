@@ -11,7 +11,7 @@ public:
 	static void Init();
 	static void Clear();
 
-	static bool BindWindowsFunc(SOCKET socket, GUID guid, LPVOID fn);
+	static bool BindWindowsFunc(SOCKET socket, GUID guid, LPVOID* fn);
 	static SOCKET CreateSocket();
 
 	static bool BindAddress(SOCKET socket, uint16 port);

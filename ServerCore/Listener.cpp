@@ -13,7 +13,7 @@ Listener::~Listener()
 
 HANDLE Listener::GetHandle()
 {
-	return HANDLE();
+	return reinterpret_cast<HANDLE>(_socket);
 }
 
 void Listener::Dispatch(IocpEvent* iocpEvent, int32 numofBytes)
@@ -52,19 +52,23 @@ void Listener::CloseSocket()
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
-	Session* session = xnew<Session>();
+	shared_ptr<Session> session = make_shared<Session>();
 
 	acceptEvent->Init();
 	acceptEvent->SetSession(session);
 
 	DWORD recvBytes = 0;
-	bool res = SocketUtils::AcceptEx(_socket, session->GetSocket(), 
-		session->recvBuf, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, 
+	bool res = SocketUtils::AcceptEx(_socket, session->GetSocket(),
+		session->recvBuf, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16,
 		OUT & recvBytes, static_cast<LPOVERLAPPED>(acceptEvent));
 	if (res == false)
 	{
-		// errCode
-		RegisterAccept(acceptEvent);
+		const int32 errorCode = ::WSAGetLastError();
+		if (errorCode != WSA_IO_PENDING)
+		{
+			// 일단 다시 Accept 걸어준다
+			RegisterAccept(acceptEvent);
+		}
 	}
 	
 

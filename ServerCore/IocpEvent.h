@@ -44,11 +44,11 @@ class AcceptEvent : public IocpEvent
 public:
 	AcceptEvent() : IocpEvent(EventType::Accept) {}
 
-	void		SetSession(Session* session) { _session = session; }
-	Session*	GetSession() { return _session; }
+	void		SetSession(shared_ptr<Session> session) { _session = session; }
+	shared_ptr<Session>	GetSession() { return _session; }
 
 private:
-	Session*	 _session;
+	shared_ptr<Session>	 _session;
 };
 
 class RecvEvent : public IocpEvent

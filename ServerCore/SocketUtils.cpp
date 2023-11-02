@@ -11,9 +11,10 @@ void SocketUtils::Init()
 	WSAStartup(MAKEWORD(2, 2), OUT &wsaData);
 
 	SOCKET socket = CreateSocket();
-	BindWindowsFunc(socket, WSAID_CONNECTEX, OUT &ConnectEx);
-	BindWindowsFunc(socket, WSAID_DISCONNECTEX, OUT &DisconnectEx);
-	BindWindowsFunc(socket, WSAID_ACCEPTEX, OUT & AcceptEx);
+	BindWindowsFunc(socket, WSAID_CONNECTEX, OUT reinterpret_cast<LPVOID*>(&ConnectEx));
+	BindWindowsFunc(socket, WSAID_DISCONNECTEX, OUT reinterpret_cast<LPVOID*>(&DisconnectEx));
+	BindWindowsFunc(socket, WSAID_ACCEPTEX, OUT reinterpret_cast<LPVOID*>(&AcceptEx));
+	closesocket(socket);
 }
 
 void SocketUtils::Clear()
@@ -21,10 +22,10 @@ void SocketUtils::Clear()
 	WSACleanup();
 }
 
-bool SocketUtils::BindWindowsFunc(SOCKET socket, GUID guid, LPVOID fn)
+bool SocketUtils::BindWindowsFunc(SOCKET socket, GUID guid, LPVOID* fn)
 {
 	DWORD bytes = 0;
-	return SOCKET_ERROR != WSAIoctl(socket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &fn, sizeof(fn), OUT & bytes, nullptr, nullptr);
+	return SOCKET_ERROR != WSAIoctl(socket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), fn, sizeof(*fn), OUT & bytes, nullptr, nullptr);
 }
 
 SOCKET SocketUtils::CreateSocket()

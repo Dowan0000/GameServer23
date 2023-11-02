@@ -57,7 +57,9 @@
     <ClInclude Include="Listener.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="Session.h" />
+    <ClInclude Include="Session.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CorePch.cpp">

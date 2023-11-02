@@ -2,8 +2,6 @@
 #include "IocpCore.h"
 #include "IocpEvent.h"
 
-shared_ptr<IocpCore> GIocpCore = make_shared<IocpCore>();
-
 IocpCore::IocpCore()
 {
 	_iocpHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);

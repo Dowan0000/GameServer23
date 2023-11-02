@@ -15,7 +15,7 @@ public:
 	SOCKET			GetSocket() { return _socket; }
 
 public:
-	char recvBuf[1024];
+	char recvBuf[1024] = { 0, };
 
 private:
 	SOCKET			_socket;
