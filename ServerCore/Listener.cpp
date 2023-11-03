@@ -57,10 +57,10 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 	acceptEvent->Init();
 	acceptEvent->SetSession(session);
 
-	DWORD recvBytes = 0;
+	DWORD numofBytes = 0;
 	bool res = SocketUtils::AcceptEx(_socket, session->GetSocket(),
 		session->recvBuf, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16,
-		OUT & recvBytes, static_cast<LPOVERLAPPED>(acceptEvent));
+		OUT & numofBytes, static_cast<LPOVERLAPPED>(acceptEvent));
 	if (res == false)
 	{
 		const int32 errorCode = ::WSAGetLastError();

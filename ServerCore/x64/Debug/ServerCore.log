@@ -1,2 +1,7 @@
-﻿  Listener.cpp
-  ServerCore.vcxproj -> C:\UnrealPortfolio\GameServer23\Libs\Debug\ServerCore.lib
+﻿  Session.cpp
+C:\Users\monsterslab\Desktop\Server\ServerCore\Session.h(56,15): error C2079: 'Session::_connectEvent'은(는) 정의되지 않은 class 'ConnectEvent'을(를) 사용합니다.
+C:\Users\monsterslab\Desktop\Server\ServerCore\Session.h(57,18): error C2079: 'Session::_disconnectEvent'은(는) 정의되지 않은 class 'DisconnectEvent'을(를) 사용합니다.
+C:\Users\monsterslab\Desktop\Server\ServerCore\Session.h(58,13): error C2079: 'Session::_recvEvent'은(는) 정의되지 않은 class 'RecvEvent'을(를) 사용합니다.
+C:\Users\monsterslab\Desktop\Server\ServerCore\Session.cpp(79,124): error C2664: 'BOOL (SOCKET,const sockaddr *,int,PVOID,DWORD,LPDWORD,LPOVERLAPPED)': 인수 7을(를) 'int *'에서 'LPOVERLAPPED'(으)로 변환할 수 없습니다.
+C:\Users\monsterslab\Desktop\Server\ServerCore\Session.cpp(79,124): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 괄호가 있는 함수 스타일 캐스트가 필요합니다.
+C:\Users\monsterslab\Desktop\Server\ServerCore\Session.cpp(75,29): error C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
