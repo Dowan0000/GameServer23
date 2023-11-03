@@ -1,10 +1,7 @@
 #pragma once
 #include "IocpCore.h"
+#include "IocpEvent.h"
 
-class ConnectEvent;
-class DisconnectEvent;
-class RecvEvent;
-class SendEvent;
 
 class Session : public IocpObject
 {

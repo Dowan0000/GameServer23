@@ -72,8 +72,8 @@ bool Session::RegisterConnect()
 	SOCKADDR_IN sockAddr;
 	memset(&sockAddr, 0, sizeof(sockAddr));
 	sockAddr.sin_family = AF_INET;
-	sockAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	sockAddr.sin_port = htons(8888);
+	inet_pton(AF_INET, "127.0.0.1", &sockAddr.sin_addr);
 
 	DWORD numofBytes = 0;
 	if (SOCKET_ERROR == SocketUtils::ConnectEx(_socket, (SOCKADDR*)&sockAddr, sizeof(sockAddr), nullptr, 0, OUT & numofBytes, &_connectEvent))

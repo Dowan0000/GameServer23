@@ -1,2 +1,3 @@
-﻿  GameServer.cpp
-  Server.vcxproj -> C:\Users\monsterslab\Desktop\Server\Bin\Debug\Server.exe
+﻿  pch.cpp
+  GameServer.cpp
+  Server.vcxproj -> C:\UnrealPortfolio\GameServer23\Bin\Debug\Server.exe
