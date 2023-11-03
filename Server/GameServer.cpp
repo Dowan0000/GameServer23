@@ -4,7 +4,23 @@
 
 #include "SocketUtils.h"
 #include "Listener.h"
+#include "Session.h"
 
+class GameSession : public Session
+{
+public:
+	virtual int32 OnRecv(BYTE* buf, int32 len) override
+	{
+		cout << "OnRecv Len = " << len << endl;
+		Send(buf, len);
+		return len;
+	}
+
+	virtual void OnSend(int32 len) override
+	{
+		cout << "OnSend Len = " << len << endl;
+	}
+};
 
 int main()
 {

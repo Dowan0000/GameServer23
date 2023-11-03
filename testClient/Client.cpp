@@ -5,6 +5,33 @@
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
+#include "Session.h"
+
+char sendBuffer[] = "Hello World";
+
+class ServerSession : public Session
+{
+public:
+	virtual void OnConnect() override
+	{
+		cout << "OnConnect" << endl;
+	}
+
+	virtual int32 OnRecv(BYTE* buf, int32 len) override
+	{
+		cout << "OnRecv Len = " << len << endl;
+		this_thread::sleep_for(1s);
+		Send((BYTE*)sendBuffer, sizeof(sendBuffer));
+		return len;
+	}
+
+	virtual void OnSend(int32 len) override
+	{
+		cout << "OnSend Len = " << len << endl;
+	}
+
+};
+
 int main()
 {
 	WSADATA wsaData;

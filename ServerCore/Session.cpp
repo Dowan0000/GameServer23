@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Session.h"
 #include "SocketUtils.h"
-#include "IocpEvent.h"
 
 Session::Session()
 {
@@ -25,14 +24,14 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 numofBytes)
 	case EventType::Connect:
 		ProcessConnect();
 		break;
-	case EventType::Accept:
+	case EventType::Disconnect:
 
 		break;
 	case EventType::Send:
 		ProcessSend(static_cast<SendEvent*>(iocpEvent), numofBytes);
 		break;
 	case EventType::Recv:
-
+		ProcessRecv(numofBytes);
 		break;
 	default:
 
@@ -96,7 +95,27 @@ bool Session::RegisterDisconnect()
 
 void Session::RegisterRecv()
 {
-	
+	if (IsConnected() == false) return;
+
+	_recvEvent.Init();
+	_recvEvent._iocpObject = shared_from_this();
+
+	WSABUF wsaBuf;
+	wsaBuf.buf = (char*)recvBuf;
+	wsaBuf.len = sizeof(recvBuf); //
+
+	DWORD numofBytes = 0;
+	DWORD flags = 0;
+	if (SOCKET_ERROR == WSARecv(_socket, &wsaBuf, 1, OUT & numofBytes, OUT & flags, &_recvEvent, nullptr))
+	{
+		int32 errCode = ::WSAGetLastError();
+		if (errCode != WSA_IO_PENDING)
+		{
+			_recvEvent._iocpObject = nullptr;
+			//
+		}
+	}
+
 }
 
 void Session::RegisterSend(SendEvent* sendEvent)
@@ -136,6 +155,16 @@ void Session::ProcessDisconnect()
 
 void Session::ProcessRecv(int32 numofBytes)
 {
+	_recvEvent._iocpObject = nullptr;
+
+	if (numofBytes == 0)
+	{
+		Disconnect();
+		return;
+	}
+
+	OnRecv(recvBuf, numofBytes);
+	RegisterRecv();
 }
 
 void Session::ProcessSend(SendEvent* sendEvent, int32 numofBytes)

@@ -1,9 +1,2 @@
-﻿  Allocator.cpp
-  CoreGlobal.cpp
-  CorePch.cpp
-  CoreTLS.cpp
-  IocpCore.cpp
-  Session.cpp
-  ThreadManager.cpp
-  코드를 생성하고 있습니다...
+﻿  Listener.cpp
   ServerCore.vcxproj -> C:\UnrealPortfolio\GameServer23\Libs\Debug\ServerCore.lib

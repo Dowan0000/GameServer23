@@ -2,7 +2,6 @@
 #include "IocpCore.h"
 #include "IocpEvent.h"
 
-
 class Session : public IocpObject
 {
 public:
@@ -41,7 +40,7 @@ protected:
 	virtual void		OnSend(int32 len) {}
 
 public:
-	char recvBuf[1024] = { 0, };
+	BYTE recvBuf[1024] = { 0, };
 
 private:
 	mutex			_lock;
