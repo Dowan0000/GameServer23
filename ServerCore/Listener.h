@@ -14,7 +14,7 @@ public:
 	virtual void	Dispatch(IocpEvent* iocpEvent, int32 numofBytes = 0) override;
 
 public:
-	bool StartAccept(SOCKET listenSocket, uint16 port);
+	bool StartAccept(uint16 port);
 	void CloseSocket();
 
 private:

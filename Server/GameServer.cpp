@@ -29,9 +29,8 @@ int main()
 	SocketUtils::Listen(socket);
 	SOCKET clientSocket = accept(socket, nullptr, nullptr);*/
 
-	SOCKET socket = SocketUtils::CreateSocket();
 	shared_ptr<Listener> listener = make_shared<Listener>();
-	listener->StartAccept(socket, 8888);
+	listener->StartAccept(8888);
 
 	for (int32 i = 0; i < 5; i++)
 	{

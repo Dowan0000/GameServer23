@@ -5,84 +5,82 @@
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
-#include "Session.h"
-
-char sendBuffer[] = "Hello World";
-
-class ServerSession : public Session
-{
-public:
-	virtual void OnConnect() override
-	{
-		cout << "OnConnect" << endl;
-	}
-
-	virtual int32 OnRecv(BYTE* buf, int32 len) override
-	{
-		cout << "OnRecv Len = " << len << endl;
-		this_thread::sleep_for(1s);
-		Send((BYTE*)sendBuffer, sizeof(sendBuffer));
-		return len;
-	}
-
-	virtual void OnSend(int32 len) override
-	{
-		cout << "OnSend Len = " << len << endl;
-	}
-
-};
 
 int main()
 {
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+	WSAData wsaData;
+	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		return 0;
 
-	SOCKET clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	
+	SOCKET clientSocket = ::socket(AF_INET, SOCK_STREAM, 0);
+	if (clientSocket == INVALID_SOCKET)
+		return 0;
+
 	u_long on = 1;
-	ioctlsocket(clientSocket, FIONBIO, &on);
+	if (::ioctlsocket(clientSocket, FIONBIO, &on) == INVALID_SOCKET)
+		return 0;
 
 	SOCKADDR_IN serverAddr;
-	memset(&serverAddr, 0, sizeof(serverAddr));
+	::memset(&serverAddr, 0, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(8888);
-	inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+	serverAddr.sin_port = ::htons(8888);
 
+	// Connect
 	while (true)
 	{
-		if (connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)))
+		if (::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
 		{
+
 			if (::WSAGetLastError() == WSAEWOULDBLOCK)
 				continue;
-			// 이미 연결된 상태라면 break
+
 			if (::WSAGetLastError() == WSAEISCONN)
 				break;
-			// Error
+
 			break;
 		}
 	}
 
 	cout << "Connected to Server!" << endl;
 
-	char sendBuffer[1024] = "Hello, Server!";
-	
+	char sendBuffer[100] = "Hello World";
+	WSAEVENT wsaEvent = ::WSACreateEvent();
+	WSAOVERLAPPED overlapped = {};
+	overlapped.hEvent = wsaEvent;
+
+	// Send
 	while (true)
 	{
 		WSABUF wsaBuf;
 		wsaBuf.buf = sendBuffer;
-		wsaBuf.len = strlen(sendBuffer);
+		wsaBuf.len = 100;
 
 		DWORD sendLen = 0;
 		DWORD flags = 0;
-		if (WSASend(clientSocket, &wsaBuf, 1, &sendLen, flags, nullptr, nullptr))
+		if (::WSASend(clientSocket, &wsaBuf, 1, &sendLen, flags, &overlapped, nullptr) == SOCKET_ERROR)
 		{
-			cout << "sendData Len : " << sizeof(sendLen) << endl;
+			if (::WSAGetLastError() == WSA_IO_PENDING)
+			{
+				// Pending
+				::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
+				::WSAGetOverlappedResult(clientSocket, &overlapped, &sendLen, FALSE, &flags);
+			}
+			else
+			{
+				break;
+			}
 		}
+
+		cout << "Send Data ! Len = " << sizeof(sendBuffer) << endl;
 
 		this_thread::sleep_for(1s);
 	}
 
+	::closesocket(clientSocket);
 
-	closesocket(clientSocket);
+	::WSACleanup();
+
+
 	return 0;
 }

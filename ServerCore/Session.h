@@ -4,6 +4,8 @@
 
 class Session : public IocpObject
 {
+	friend class Listener;
+
 public:
 	Session();
 	virtual ~Session();

@@ -22,7 +22,7 @@ void Listener::Dispatch(IocpEvent* iocpEvent, int32 numofBytes)
 	ProcessAccept(acceptEvent);
 }
 
-bool Listener::StartAccept(SOCKET listenSocket, uint16 port)
+bool Listener::StartAccept(uint16 port)
 {
 	_socket = SocketUtils::CreateSocket();
 	if (_socket == INVALID_SOCKET)
@@ -76,7 +76,13 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 
 void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 {
-	// process
-
 	cout << "Client Connected" << endl;
+
+	shared_ptr<Session> session = acceptEvent->GetSession();
+	if (session == nullptr)
+		return;
+
+	session->ProcessConnect();
+
+	//RegisterAccept(acceptEvent);
 }

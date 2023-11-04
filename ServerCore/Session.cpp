@@ -106,13 +106,14 @@ void Session::RegisterRecv()
 
 	DWORD numofBytes = 0;
 	DWORD flags = 0;
+	cout << "WSARecv" << endl;
 	if (SOCKET_ERROR == WSARecv(_socket, &wsaBuf, 1, OUT & numofBytes, OUT & flags, &_recvEvent, nullptr))
 	{
+		cout << "WSARecv failed" << endl;
 		int32 errCode = ::WSAGetLastError();
 		if (errCode != WSA_IO_PENDING)
 		{
 			_recvEvent._iocpObject = nullptr;
-			//
 		}
 	}
 
