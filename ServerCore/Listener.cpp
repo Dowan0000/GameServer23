@@ -53,6 +53,7 @@ void Listener::CloseSocket()
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
 	shared_ptr<Session> session = make_shared<Session>();
+	GIocpCore->Register(session);
 
 	acceptEvent->Init();
 	acceptEvent->SetSession(session);

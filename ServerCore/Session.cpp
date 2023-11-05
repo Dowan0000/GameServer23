@@ -19,6 +19,7 @@ HANDLE Session::GetHandle()
 
 void Session::Dispatch(IocpEvent* iocpEvent, int32 numofBytes)
 {
+	//cout << "Session::Dispatch" << endl;
 	switch (iocpEvent->_eventType)
 	{
 	case EventType::Connect:
@@ -34,7 +35,7 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 numofBytes)
 		ProcessRecv(numofBytes);
 		break;
 	default:
-
+		cout << "Unknown Event" << endl;
 		break;
 	}
 }
@@ -106,10 +107,8 @@ void Session::RegisterRecv()
 
 	DWORD numofBytes = 0;
 	DWORD flags = 0;
-	cout << "WSARecv" << endl;
 	if (SOCKET_ERROR == WSARecv(_socket, &wsaBuf, 1, OUT & numofBytes, OUT & flags, &_recvEvent, nullptr))
 	{
-		cout << "WSARecv failed" << endl;
 		int32 errCode = ::WSAGetLastError();
 		if (errCode != WSA_IO_PENDING)
 		{
@@ -163,6 +162,8 @@ void Session::ProcessRecv(int32 numofBytes)
 		Disconnect();
 		return;
 	}
+
+	cout << "Recv Data ! Len = " << numofBytes << endl;
 
 	OnRecv(recvBuf, numofBytes);
 	RegisterRecv();
