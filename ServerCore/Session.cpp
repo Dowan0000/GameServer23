@@ -26,7 +26,7 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 numofBytes)
 		ProcessConnect();
 		break;
 	case EventType::Disconnect:
-
+		ProcessDisconnect();
 		break;
 	case EventType::Send:
 		ProcessSend(static_cast<SendEvent*>(iocpEvent), numofBytes);
@@ -58,6 +58,17 @@ bool Session::Connect()
 
 void Session::Disconnect()
 {
+	if (_isConnected.exchange(false) == false) return;
+
+	cout << "Session::Disconnect" << endl;
+	OnDisconnect();
+
+	/*if(_connectEvent._iocpObject)
+		_connectEvent._iocpObject = nullptr;*/
+
+	// 技记包府磊俊辑 力芭
+
+	RegisterDisconnect();
 }
 
 bool Session::RegisterConnect()
@@ -91,7 +102,20 @@ bool Session::RegisterConnect()
 
 bool Session::RegisterDisconnect()
 {
-	return false;
+	_disconnectEvent.Init();
+	_disconnectEvent._iocpObject = shared_from_this();
+
+	if (SOCKET_ERROR == SocketUtils::DisconnectEx(_socket, &_disconnectEvent, TF_REUSE_SOCKET, 0))
+	{
+		int32 errCode = ::WSAGetLastError();
+		if (errCode != WSA_IO_PENDING)
+		{
+			_disconnectEvent._iocpObject = nullptr;
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Session::RegisterRecv()
@@ -145,12 +169,15 @@ void Session::ProcessConnect()
 
 	_isConnected.store(true);
 
+	// 技记 包府磊俊 殿废
+
 	OnConnect();
 	RegisterRecv();
 }
 
 void Session::ProcessDisconnect()
 {
+	_disconnectEvent._iocpObject = nullptr;
 }
 
 void Session::ProcessRecv(int32 numofBytes)
@@ -162,8 +189,6 @@ void Session::ProcessRecv(int32 numofBytes)
 		Disconnect();
 		return;
 	}
-
-	cout << "Recv Data ! Len = " << numofBytes << endl;
 
 	OnRecv(recvBuf, numofBytes);
 	RegisterRecv();

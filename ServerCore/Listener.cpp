@@ -3,6 +3,7 @@
 #include "SocketUtils.h"
 #include "IocpEvent.h"
 #include "Session.h"
+#include "GameSession.h"
 
 Listener::~Listener()
 {
@@ -52,7 +53,7 @@ void Listener::CloseSocket()
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
-	shared_ptr<Session> session = make_shared<Session>();
+	shared_ptr<GameSession> session = make_shared<GameSession>();
 	GIocpCore->Register(session);
 
 	acceptEvent->Init();
@@ -79,11 +80,11 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 {
 	cout << "Client Connected" << endl;
 
-	shared_ptr<Session> session = acceptEvent->GetSession();
+	shared_ptr<GameSession> session = static_pointer_cast<GameSession>(acceptEvent->GetSession());
 	if (session == nullptr)
 		return;
 
 	session->ProcessConnect();
 
-	//RegisterAccept(acceptEvent);
+	RegisterAccept(acceptEvent);
 }

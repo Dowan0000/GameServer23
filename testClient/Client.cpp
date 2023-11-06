@@ -5,6 +5,7 @@
 #include <WS2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
+#include "ThreadManager.h"
 
 int main()
 {
@@ -44,38 +45,30 @@ int main()
 
 	cout << "Connected to Server!" << endl;
 
-	char sendBuffer[100] = "Hello World";
-	WSAEVENT wsaEvent = ::WSACreateEvent();
-	WSAOVERLAPPED overlapped = {};
-	overlapped.hEvent = wsaEvent;
-
-	// Send
-	while (true)
+	for (int32 i = 0; i < 5; i++)
 	{
-		WSABUF wsaBuf;
-		wsaBuf.buf = sendBuffer;
-		wsaBuf.len = 100;
-
-		DWORD sendLen = 0;
-		DWORD flags = 0;
-		if (::WSASend(clientSocket, &wsaBuf, 1, &sendLen, flags, &overlapped, nullptr) == SOCKET_ERROR)
-		{
-			if (::WSAGetLastError() == WSA_IO_PENDING)
+		GThreadManager->LaunchThread([=]()
 			{
-				// Pending
-				::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
-				::WSAGetOverlappedResult(clientSocket, &overlapped, &sendLen, FALSE, &flags);
-			}
-			else
-			{
-				break;
-			}
-		}
+				while (true)
+				{
+					char sendBuffer[100] = "Hello World";
 
-		cout << "Send Data ! Len = " << sizeof(sendBuffer) << endl;
+					int32 sendLen = send(clientSocket, sendBuffer, sizeof(sendBuffer), 0);
 
-		this_thread::sleep_for(1s);
+					cout << "Send Len : " << sendLen << endl;
+
+					char recvBuffer[100] = { 0, };
+					int32 recvLen = recv(clientSocket, recvBuffer, sizeof(recvBuffer), 0);
+
+					cout << "Recv Len : " << recvLen << endl;
+
+					this_thread::sleep_for(1s);
+				}
+			});
 	}
+	
+	GThreadManager->Join();
+
 
 	::closesocket(clientSocket);
 
