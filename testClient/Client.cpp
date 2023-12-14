@@ -9,6 +9,8 @@
 
 int main()
 {
+	this_thread::sleep_for(1s);
+
 	WSAData wsaData;
 	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 		return 0;
@@ -25,7 +27,7 @@ int main()
 	::memset(&serverAddr, 0, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
 	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
-	serverAddr.sin_port = ::htons(8888);
+	serverAddr.sin_port = ::htons(8765);
 
 	// Connect
 	while (true)
